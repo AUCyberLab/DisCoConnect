@@ -23,9 +23,13 @@ def main():
     # d2.draw()
 
     MG = diagram_to_metagraph(d1)
+    print(MG)
     paths = MG.get_all_metapaths_from({'x', 'y'}, {'z'})
     for path in paths:
         print(path)
+        
+    path = MG.get_dominant_metapath({'x', 'y'}, {'z'})    
+    print(path)
 
 if __name__ == '__main__':
     main()

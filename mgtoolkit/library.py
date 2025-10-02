@@ -1683,7 +1683,7 @@ class Metagraph(object):
                     tmp_source.remove(input)
         return Metapath(tmp_source, target, edges)
     
-    def find_dominant_metapath(self, source, target):
+    def get_dominant_metapath(self, source, target):
         """ Finds a dominant ordered metapath between the given source and target.
         :param source: set
         :param target: set

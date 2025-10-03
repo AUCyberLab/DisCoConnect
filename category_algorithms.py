@@ -34,7 +34,7 @@ class HypergraphCategory:
                     if w not in self.wires: 
                         self.wires[w] = Ty(w)
                         self.objects.add(w)
-            boxes[name] = Box(name, reduce(lambda a, b: self.wires[a] @ self.wires[b], morphism[0]), reduce(lambda a, b: self.wires[a] @ self.wires[b], morphism[1]))
+            boxes[name] = Box(name, reduce(lambda a, b: a @ b, [self.wires[obj] for obj in morphism[0]]), reduce(lambda a, b: a @ b, [self.wires[obj] for obj in morphism[1]]))
         return boxes
     
     def create_wires(self, objects):
@@ -84,3 +84,4 @@ def show_morphisms(metapath):
     Is it possible to authomate the generation of a string diagram?
     
     """
+    return

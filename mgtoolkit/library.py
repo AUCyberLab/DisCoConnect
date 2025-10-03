@@ -1689,7 +1689,7 @@ class Metagraph(object):
         :param target: set
         :return: Metapath object
         """
-        print(self.edges)
+        # print(self.edges)
         if source is None or len(source) == 0:
             raise MetagraphException('source', resources['value_null'])
         if target is None or len(target) == 0:

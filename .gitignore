@@ -1,3 +1,4 @@
 .discopy_computing/
 __pycache__/
 mgtoolkit/__pycache__/
+.DS_Store

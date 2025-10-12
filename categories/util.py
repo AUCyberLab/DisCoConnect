@@ -34,7 +34,7 @@ def random_diagram_generator(seed, object_size, diagram_dom_size):
         else:
             # set domain as domain.cod
             print(diagram)
-            diagram.draw()
+            # diagram.draw()
             domain = diagram.cod
         # Randomly generate: morphism / spider / swap / wire (new / existing); or terminating a wire.    
         # !!! Toss a coin: morphism / spider / swap / wire (new / existing) / termianting a wire.
@@ -84,7 +84,7 @@ def random_diagram_generator(seed, object_size, diagram_dom_size):
             diagram = diagram >> reduce(lambda a, b: a @ b, layer_composition)
         else:
             diagram = reduce(lambda a, b: a @ b, layer_composition)
-    return diagram, objects, morphisms
+    return diagram.simplify(), objects, morphisms
 
 def _generate_morphism(m_name, m_dom, objects):
     # randomly generate codomain for the new morphism

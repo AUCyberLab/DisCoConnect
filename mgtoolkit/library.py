@@ -69,10 +69,9 @@ class Triple(object):
             return False
         if not isinstance(other,Triple):
             return False
-
         return (self.coinputs == other.coinputs and
                 self.cooutputs == other.cooutputs and
-                len(self.edges) == len(other.edges) and
+                # len(self.edges) == len(other.edges) and
                 self.edges == other.edges)
     def __hash__(self):
         # Make Triple usable in sets/dicts. Must match __eq__ semantics.
@@ -168,6 +167,7 @@ class Edge(object):
 
         return (self.invertex == other.invertex and
                 self.outvertex == other.outvertex and
+                self.label == other.label and
                 self.attributes == other.attributes)
 
 
@@ -595,17 +595,17 @@ class Metagraph(object):
         a_star = adjacency_matrix
 
         for i in range(size):
-            #print(' iteration %s --------------'%i)
+            # print(' iteration %s --------------'%i)
             a[i+1] = MetagraphHelper().multiply_adjacency_matrices(a[i],
                                                                    self.generating_set,
                                                                    adjacency_matrix,
                                                                    self.generating_set)
-            #print('multiply_adjacency_matrices complete')
+            # print('multiply_adjacency_matrices complete')
             a_star = MetagraphHelper().add_adjacency_matrices(a_star,
                                                               self.generating_set,
                                                               a[i+1],
                                                               self.generating_set)
-            #print('add_adjacency_matrices complete')
+            # print('add_adjacency_matrices complete')
             if a[i+1] == a[i]:
                 break
 
@@ -633,9 +633,11 @@ class Metagraph(object):
 
         # compute A* first
         if self.a_star is None:
-            #print('computing closure..')
+            # print('computing closure..')
             self.a_star = self.get_closure().tolist()
-            #print('closure computation- %s'%(time.time()- start))
+            # curr_time = time.time()
+            # print(f'closure computation- {curr_time- start}')
+            # start = curr_time
 
         metapaths = []
         all_applicable_input_rows = []
@@ -643,7 +645,6 @@ class Metagraph(object):
             index = list(self.generating_set).index(x_i)
             if index not in all_applicable_input_rows:
                 all_applicable_input_rows.append(index)
-
 
         cumulative_output_global = []
         cumulative_edges_global = []
@@ -725,8 +726,9 @@ class Metagraph(object):
                     all_outputs.append(output_elt)
 
         # now check input and output sets
-        if (set(all_inputs).difference(set(all_outputs)).issubset(metapath_candidate.source)) and \
-           set(metapath_candidate.target).issubset(all_outputs):
+        # if (set(all_inputs).difference(set(all_outputs)).issubset(metapath_candidate.source)) and \
+        #    set(metapath_candidate.target).issubset(all_outputs):
+        if (set(all_inputs)-set(all_outputs)).issubset(metapath_candidate.source) and set(metapath_candidate.target).issubset(all_outputs):
             return True
 
         return False
@@ -744,7 +746,6 @@ class Metagraph(object):
         # check input metapath is valid
         if not self.is_metapath(metapath):
             return False
-        print(metapath.edge_list)
         # print("here")
         # dasdasd
         all_subsets = sum([list(combinations(metapath.edge_list, r)) for r in range(1, len(metapath.edge_list)+1)], [])
@@ -798,8 +799,7 @@ class Metagraph(object):
         if not self.is_metapath(metapath):
             return False
 
-        if (self.is_edge_dominant_metapath(metapath) and
-           self.is_input_dominant_metapath(metapath)):
+        if self.is_edge_dominant_metapath(metapath) and self.is_input_dominant_metapath(metapath):
             return True
 
         return False
@@ -1479,8 +1479,7 @@ class Metagraph(object):
                 if source != target:
                     mp = self.get_all_metapaths_from(set(source), set(target))
                     if mp is not None and len(mp) > 0 and (mp not in all_metapaths1):
-                        all_metapaths1.append(mp)
-                    #print(i)
+                        all_metapaths1 += mp
                     i += 1
 
         all_metapaths2 = []
@@ -1489,7 +1488,7 @@ class Metagraph(object):
                 if source != target:
                     mp = self.get_all_metapaths_from(set(source), set(target))
                     if mp is not None and len(mp) > 0 and (mp not in all_metapaths2):
-                        all_metapaths2.append(mp)
+                        all_metapaths2 += mp
 
         for mp1 in all_metapaths2:
             dominated = False
@@ -1522,8 +1521,7 @@ class Metagraph(object):
         metapath_edges = []
         current_bag = set(source)
         added = True
-        while added != False:
-
+        while added:
             added = False
             for edge in edges:
                 if edge in metapath_edges:
@@ -1536,8 +1534,12 @@ class Metagraph(object):
 
         if len(metapath_edges) == 0:
             return None
+    
+        path = Metapath(source, target, metapath_edges)
+        if not self.is_metapath(path):
+            return None
 
-        return Metapath(source, target, metapath_edges)
+        return path
     
     def is_ordered_metapath(self, metapath, is_metapath_handled=False):
         """ Checks if the given metapath is an ordered metapath.
@@ -1647,7 +1649,7 @@ class Metagraph(object):
                 if self.is_ordered_metapath(tmp_metapath, is_metapath_handled=True):
                     changed = True
                     tmp_edges.remove(edge)
-        print(tmp_edges)
+        # print(tmp_edges)
         return Metapath(source, target, tmp_edges)
     
     def make_input_dominant(self, metapath):

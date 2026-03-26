@@ -1,6 +1,6 @@
 # DisCoConnect
 
-**DisCoConnect** is a Python toolkit for computing syntactic connectivity properties of hypergraph category string diagrams. It extends the [DisCoPy](https://github.com/discopy/dis by providing algorithmic support for analysing how morphisms compose in hypergraph categories at the diagrammatic level.
+**DisCoConnect** is a Python toolkit for computing syntactic connectivity properties of hypergraph category string diagrams. It extends the [DisCoPy](https://github.com/discopy/) by providing algorithmic support for analysing how morphisms compose in hypergraph categories at the diagrammatic level.
 
 DisCoConnect maps hypergraph string diagrams to *metagraph* representations, enabling the reuse of established metagraph connectivity algorithms to reason about composition, dominance, and cut structures in categorical diagrams.
 

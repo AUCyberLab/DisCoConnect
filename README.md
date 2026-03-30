@@ -34,8 +34,8 @@ DisCoConnect requires **Python 3.9+**.
 Clone the repository and install locally:
 
 ```bash
-git clone https://github.com/<your-org>/discoconnect.git
-cd discoconnect
-pip install -e .
-
+git clone https://github.com/AUCyberLab/DisCoConnect.git
+cd DisCoConnect
+pip install -r requirements.txt
+```
 

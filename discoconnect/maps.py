@@ -1,6 +1,5 @@
 from discopy import frobenius
 from mgtoolkit import library
-from discoconnect.util import tensor_list
 from discoconnect.util import construct_hypergraph_diagram
 
 
@@ -73,42 +72,26 @@ def metagraph_to_frobenius_hypergraph(mg: library.Metagraph) -> frobenius.Hyperg
         hc (discopy.frobenius.Hypergraph): a hypergraph string diagram.
     """
     dom, cod = [], []
-    objects = {}
+    objects = set()
     boxes = {}
 
     for v in mg.generating_set:
         if v == 'dom_pointer' or v == 'cod_pointer': 
             continue
-        objects[v] = frobenius.Ty(v)
+        objects.add(v)
         
 
     for e in mg.edges:
         if 'dom_pointer' in e.invertex:
-            dom = [objects[o] for o in e.outvertex]
+            dom = list(e.outvertex)
         elif 'cod_pointer' in e.outvertex:
-            cod = [objects[o] for o in e.invertex]
+            cod = list(e.invertex)
         else:
             # Morphism / box
-            boxes[e.label] = frobenius.Box(e.label, tensor_list([objects[o] for o in e.invertex]), tensor_list([objects[o] for o in e.outvertex]))
+            boxes[e.label] = (tuple(e.invertex), tuple(e.outvertex))
     
-    # dom, cod of hypergraph category
-    hypergraph_dom = tuple([o.name for o in dom])
-    hypergraph_cod = tuple([o.name for o in cod])
-    ## wires
-    wires = []
-    for b in boxes.values():
-        # wires
-        input = tuple([o.name for o in b.dom])
-        output = tuple([o.name for o in b.cod])
-        wires.append(tuple([input, output]))
-
-    hg = frobenius.Hypergraph(
-        dom=tensor_list(dom),
-        cod=tensor_list(cod),
-        boxes=tuple(b for b in boxes.values()),
-        wires=(hypergraph_dom, tuple(wires), hypergraph_cod),
-        spider_types=dict((o.name, o) for o in objects.values()),
-    )
+    hg = construct_hypergraph_diagram(objects, boxes, dom, cod)
+    
     return hg
 
 def visualise_metapath_as_planar_diagram(path: library.Metapath):

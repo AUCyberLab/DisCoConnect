@@ -35,7 +35,7 @@ Clone the repository and install locally:
 
 ```bash
 git clone https://github.com/AUCyberLab/DisCoConnect.git
-cd discoconnect
+cd DisCoConnect
 pip install -r requirements.txt
 ```
 

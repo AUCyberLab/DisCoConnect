@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "discoconnect"
+version = "0.1.0"
+description = "Connectivity analysis for hypergraph string diagrams."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "AUCyberLab" }]
+dependencies = [
+    "discopy==1.2.2",
+]
+
+[project.optional-dependencies]
+test = ["pytest==8.3.3"]
+
+[tool.setuptools]
+packages = ["discoconnect", "mgtoolkit"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -m 'not slow'"
+markers = ["slow: marks tests as slow (deselected by default; run with -m slow)"]

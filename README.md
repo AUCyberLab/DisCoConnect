@@ -29,13 +29,24 @@ DisCoConnect addresses this gap by translating hypergraph category string diagra
 
 ## Installation
 
-DisCoConnect requires **Python 3.9+**.
+DisCoConnect requires **Python 3.10+** (required by `discopy`).
 
 Clone the repository and install locally:
 
 ```bash
 git clone https://github.com/AUCyberLab/DisCoConnect.git
 cd DisCoConnect
-pip install -r requirements.txt
+pip install -e .
+```
+
+This installs DisCoConnect (and its pinned dependency `discopy==1.2.2`) in editable mode, so you can import `discoconnect` from anywhere.
+
+### Development / testing
+
+To run the test suite, also install the dev dependencies:
+
+```bash
+pip install -r requirements-dev.txt
+pytest tests/
 ```
 
